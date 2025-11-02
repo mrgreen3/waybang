@@ -3,7 +3,7 @@
 # Profile modified for GreenBang 
 # by Mr Green [mrgreen@archbang.org]
 
-iso_name="archbang-rc"
+iso_name="archbang-beta"
 iso_label="ARCHBANG_$(date +%d%m)"
 iso_publisher="ArchBANG Project <https://www.archbang.org>"
 iso_application="ArchBang Project Live/Rescue Iso"
@@ -21,7 +21,7 @@ file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/root"]="0:0:750"
   ["/root/.gnupg"]="0:0:700"
-  ["/etc/skel/GB_Scripts/"]="0:0:755"
+  ["/etc/skel/AB_Scripts/"]="0:0:755"
   ["/root/mvuser"]="0:0:755"
 )
 #bootstrap_tarball_compression=(gzip -cn9)

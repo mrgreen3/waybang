@@ -817,7 +817,7 @@ configure_fstab(){
 configure_hostname(){
   print_title "HOSTNAME - ${WIKI}/hostname"
   print_info "A host name is a unique name created to identify a machine on a network. Length is restricted to 63 characters."
-  read -p "Hostname [ex: greenbang]: " host_name
+  read -p "Hostname [ex: archbang]: " host_name
   echo "$host_name" > ${MNT}/etc/hostname
   arch_chroot "sed -i '/127.0.0.1/s/$/ '${host_name}'/' /etc/hosts"
   arch_chroot "sed -i '/::1/s/$/ '${host_name}'/' /etc/hosts"
@@ -1097,7 +1097,7 @@ while true
 do
   print_title "ArchBang installer - www.archbang.org"
   echo " 1) $(mainmenu_item "${checklist[1]}" "Partition Scheme")"
-  echo " 2) $(mainmenu_item "${checklist[2]}" "Install GreenBang")"
+  echo " 2) $(mainmenu_item "${checklist[2]}" "Install ArchBang")"
   echo " 3) $(mainmenu_item "${checklist[3]}" "Hostname")"
   echo " 4) $(mainmenu_item "${checklist[4]}" "Location")"
   echo " 5) $(mainmenu_item "${checklist[5]}" "Hardware Clock")"

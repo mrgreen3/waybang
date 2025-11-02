@@ -20,11 +20,11 @@ chown -c root:root /etc/sudoers
 chmod -c 0440 /etc/sudoers
 
 # Hostname
-echo "greenbang" > /etc/hostname
+echo "archbang" > /etc/hostname
 
 # Vconsole
 echo "KEYMAP=us" > /etc/vconsole.conf
-echo "FONT=" >> /etc/vconsole.conf
+echo "FONT=Lat2-Terminus16" >> /etc/vconsole.conf
 
 # Locale
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
