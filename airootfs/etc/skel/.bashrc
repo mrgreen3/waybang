@@ -1,4 +1,4 @@
-# add nano as default editor
+# add vim as default editor
 export EDITOR=vim
 export TERMINAL=alacritty
 export BROWSER=firefox
