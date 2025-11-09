@@ -1,4 +1,4 @@
-# GreenBANG Project Guide
+# ArchBANG Project Guide
 
 Welcome to **ArchBANG Project**, a lightweight Arch-based live ISO.
 Visit: [www.archbang.org/Guide](http://www.archbang.org/Guide)
@@ -86,7 +86,7 @@ Refer to the instructions in the **Pacman Live** section above if needed.
 `pacman` will not work until keys are initialized. Run the following:
 
 ```
-gb-pacman-keys
+ab-pacman-keys
 ```
 
 This will:

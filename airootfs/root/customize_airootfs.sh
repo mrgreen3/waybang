@@ -36,7 +36,6 @@ hwclock --systohc --utc
 # Timezone
 ln -sf /usr/share/zoneinfo/Canada/Montreal /etc/localtime
 
-
 # Target directory where systemd user service symlinks will be created
 TARGET_DIR="/etc/skel/.config/systemd/user/default.target.wants"
 
@@ -58,8 +57,6 @@ for service in "${SERVICES[@]}"; do
   ln -sf "$UNIT_SRC/$service" "$TARGET_DIR/$service"
 done
 
-# Be excellent to each other... and to your ~/.config 🎸
-
 # Add live user
 useradd -m -p "" -G "wheel" -s /bin/bash -g users ablive 
 chown ablive /home/ablive
@@ -67,9 +64,5 @@ chown ablive /home/ablive
 # Start required systemd services
 systemctl enable {pacman-init,NetworkManager}.service -f
 
-#systemctl set-default multi-user.target
+# Set graphical target
 systemctl set-default graphical.target
-
-# Revert from archiso preset to default preset
-cp -rf "/usr/share/mkinitcpio/hook.preset" "/etc/mkinitcpio.d/linux.preset"
-sed -i 's?%PKGBASE%?linux?' "/etc/mkinitcpio.d/linux.preset"

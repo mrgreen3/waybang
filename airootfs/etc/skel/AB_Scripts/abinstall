@@ -916,6 +916,20 @@ install_archbang(){
   # Generate unique machine id
   arch-chroot ${MNT} systemd-machine-id-setup
 
+  # Convert mkinitcpio preset from archiso to standard for installed system
+  cat > ${MNT}/etc/mkinitcpio.d/linux.preset <<'EOF'
+# SPDX-License-Identifier: GPL-3.0-or-later
+# mkinitcpio preset file for the 'linux' package
+
+PRESETS=('default' 'fallback')
+ALL_kver='/boot/vmlinuz-linux'
+ALL_config='/etc/mkinitcpio.conf'
+
+default_image="/boot/initramfs-linux.img"
+fallback_image="/boot/initramfs-linux-fallback.img"
+fallback_options="-S autodetect"
+EOF
+
   # put live driver into new install
   cp /etc/X11/xorg.conf.d/20-gpudriver.conf ${MNT}/etc/X11/xorg.conf.d/20-gpudriver.conf &>/dev/null
 
@@ -1019,19 +1033,23 @@ configure_mkinitcpio(){
     print_title "Configuring mkinitcpio"
     print_info "Setting up initramfs hooks based on your system configuration."
 
-    # Determine hooks based on setup
+    # Determine hooks based on setup (systemd-based modern configuration)
     if [[ $LUKS -eq 1 && $LVM -eq 1 ]]; then
-        MKINITCPIO_HOOKS="base udev autodetect modconf block keyboard encrypt lvm2 filesystems fsck"
+        MKINITCPIO_HOOKS="base systemd autodetect microcode modconf kms keyboard keymap sd-vconsole sd-encrypt block lvm2 filesystems fsck"
     elif [[ $LUKS -eq 1 ]]; then
-        MKINITCPIO_HOOKS="base udev autodetect modconf block keyboard encrypt filesystems fsck"
+        MKINITCPIO_HOOKS="base systemd autodetect microcode modconf kms keyboard keymap sd-vconsole sd-encrypt block filesystems fsck"
     elif [[ $LVM -eq 1 ]]; then
-        MKINITCPIO_HOOKS="base udev autodetect modconf block keyboard lvm2 filesystems fsck"
+        MKINITCPIO_HOOKS="base systemd autodetect microcode modconf kms keyboard keymap sd-vconsole block lvm2 filesystems fsck"
     else
-        MKINITCPIO_HOOKS="base udev autodetect modconf block keyboard filesystems fsck"
+        MKINITCPIO_HOOKS="base systemd autodetect microcode modconf kms keyboard keymap sd-vconsole block filesystems fsck"
     fi
 
-    # Update mkinitcpio.conf
+    # Update mkinitcpio.conf with hooks
     arch_chroot "sed -i -E 's|^HOOKS=.*|HOOKS=(${MKINITCPIO_HOOKS})|' /etc/mkinitcpio.conf"
+
+    # Comment out xz compression and compression options to use zstd default for installed system
+    arch_chroot "sed -i 's/^COMPRESSION=\"xz\"/#COMPRESSION=\"xz\"/' /etc/mkinitcpio.conf"
+    arch_chroot "sed -i 's/^COMPRESSION_OPTIONS=/#COMPRESSION_OPTIONS=/' /etc/mkinitcpio.conf"
 
     # Rebuild initramfs
     arch_chroot "mkinitcpio -p linux"
